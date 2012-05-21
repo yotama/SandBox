@@ -26,6 +26,11 @@ public class PHPSerializerTest {
 	}
 
 	@Test
+	public void test_serialize_Null() {
+		assertThat(target.serialize(null), is("N;"));
+	}
+
+	@Test
 	public void test_serialize_String() {
 		assertThat(target.serialize("Yotama"), is("s:6:\"Yotama\";"));
 	}
