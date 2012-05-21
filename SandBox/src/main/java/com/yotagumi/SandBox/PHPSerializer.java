@@ -23,7 +23,7 @@ public class PHPSerializer {
 	 */
 	public String serialize(Object object) {
 		StringBuilder result = new StringBuilder();
-		doSerialize(object, result);
+		serializeCore(object, result);
 
 		return result.toString();
 	}
@@ -34,7 +34,7 @@ public class PHPSerializer {
 	 * @param object
 	 * @param result
 	 */
-	private void doSerialize(Object object, StringBuilder result) {
+	private void serializeCore(Object object, StringBuilder result) {
 		if (object == null) {
 			result.append("N;");
 		} else if (object instanceof String) {
@@ -64,8 +64,7 @@ public class PHPSerializer {
 	 *            output buffer for PHP format
 	 */
 	private void serializeString(String str, StringBuilder result) {
-		result.append("s:").append(str.length()).append(":\"").append(str)
-				.append("\";");
+		result.append("s:").append(str.length()).append(":\"").append(str).append("\";");
 	}
 
 	/**
@@ -85,7 +84,7 @@ public class PHPSerializer {
 	 * @param result
 	 */
 	private void serializeInteger(Number number, StringBuilder result) {
-		result.append(String.format("i:%s;", number.toString()));
+		result.append("i:").append(number.toString()).append(";");
 	}
 
 	/**
@@ -107,8 +106,8 @@ public class PHPSerializer {
 	private void serializeMap(Map<?, ?> map, StringBuilder result) {
 		result.append("a:").append(map.size()).append(":{");
 		for (Object item : map.keySet()) {
-			doSerialize(item, result);
-			doSerialize(map.get(item), result);
+			serializeCore(item, result);
+			serializeCore(map.get(item), result);
 		}
 		result.append("}");
 	}
@@ -123,8 +122,8 @@ public class PHPSerializer {
 		result.append("a:").append(list.size()).append(":{");
 		int i = 0;
 		for (Object item : list) {
-			doSerialize(i++, result);
-			doSerialize(item, result);
+			serializeCore(i++, result);
+			serializeCore(item, result);
 		}
 		result.append("}");
 	}
@@ -163,7 +162,7 @@ public class PHPSerializer {
 			}
 			String propertyName = descriptor.getName();
 			result.append("s:").append(propertyName.length()).append(":\"").append(propertyName).append("\";");
-			doSerialize(property, result);
+			serializeCore(property, result);
 		}
 		
 		result.append("}");
