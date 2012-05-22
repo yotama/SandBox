@@ -12,10 +12,8 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.yotagumi.sandbox.PHPSerializer;
-
 /**
- * Test for PHPSerialize
+ * Test for PHPSerializer
  * 
  * @author Yotama
  * 
@@ -61,7 +59,7 @@ public class PHPSerializerTest {
 
 	@Test
 	public void test_serialized_Map() {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("name", "Yotama");
 		map.put("age", 28);
 		assertThat(target.serialize(map), is("a:2:{s:3:\"age\";i:28;s:4:\"name\";s:6:\"Yotama\";}"));
@@ -73,6 +71,27 @@ public class PHPSerializerTest {
 		list.add("Kagoshima");
 		list.add("Tokyo");
 		assertThat(target.serialize(list), is("a:2:{i:0;s:9:\"Kagoshima\";i:1;s:5:\"Tokyo\";}"));
+	}
+	
+	@Test
+	public void test_serialized_array() {
+		int[] intArray = {10, 20};
+		assertThat(target.serialize(intArray), is("a:2:{i:0;i:10;i:1;i:20;}"));
+		long[] longArray = { 11L, 22L };
+		assertThat(target.serialize(longArray), is("a:2:{i:0;i:11;i:1;i:22;}"));
+		short[] shortArray = { 12, 23 };
+		assertThat(target.serialize(shortArray), is("a:2:{i:0;i:12;i:1;i:23;}"));
+		byte[] byteArray = { 0, 127 };
+		assertThat(target.serialize(byteArray), is("a:2:{i:0;i:0;i:1;i:127;}"));
+		double[] doubleArray = { 0.01, 2.1 };
+		assertThat(target.serialize(doubleArray), is("a:2:{i:0;d:0.01;i:1;d:2.1;}"));
+		float[] floatArray = { 0.02f, 2.2f };
+		assertThat(target.serialize(floatArray), is("a:2:{i:0;d:0.02;i:1;d:2.2;}"));
+		Object[] objectArray = { Boolean.valueOf(true), "Groovy" };
+		assertThat(target.serialize(objectArray), is("a:2:{i:0;b:1;i:1;s:6:\"Groovy\";}"));
+
+		int[] emptyIntArray = new int[0];
+		assertThat(target.serialize(emptyIntArray), is("a:0:{}"));
 	}
 
 	@Test

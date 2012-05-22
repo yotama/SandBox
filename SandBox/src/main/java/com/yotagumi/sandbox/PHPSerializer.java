@@ -1,6 +1,7 @@
 package com.yotagumi.sandbox;
 
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -41,8 +42,7 @@ public class PHPSerializer {
 			serializeString((String) object, result);
 		} else if (object instanceof Boolean) {
 			serializeBoolean((Boolean) object, result);
-		} else if (object instanceof Integer || object instanceof Long
-				|| object instanceof Byte || object instanceof Short) {
+		} else if (object instanceof Integer || object instanceof Long || object instanceof Byte || object instanceof Short) {
 			serializeInteger((Number) object, result);
 		} else if (object instanceof Number) {
 			serializeDouble((Number) object, result);
@@ -50,6 +50,9 @@ public class PHPSerializer {
 			serializeMap((Map<?, ?>) object, result);
 		} else if (object instanceof List) {
 			serializeList((List<?>) object, result);
+		} else if (object instanceof int[] || object instanceof long[] || object instanceof byte[] || object instanceof short[]
+				|| object instanceof double[] || object instanceof float[] || object instanceof Object[]) {
+			serializeArray(object, result);
 		} else if (object instanceof Object) {
 			serializeBean(object, result);
 		}
@@ -105,10 +108,12 @@ public class PHPSerializer {
 	 */
 	private void serializeMap(Map<?, ?> map, StringBuilder result) {
 		result.append("a:").append(map.size()).append(":{");
+
 		for (Object item : map.keySet()) {
 			serializeCore(item, result);
 			serializeCore(map.get(item), result);
 		}
+
 		result.append("}");
 	}
 
@@ -120,11 +125,32 @@ public class PHPSerializer {
 	 */
 	private void serializeList(List<?> list, StringBuilder result) {
 		result.append("a:").append(list.size()).append(":{");
+
 		int i = 0;
 		for (Object item : list) {
 			serializeCore(i++, result);
 			serializeCore(item, result);
 		}
+
+		result.append("}");
+	}
+	
+	/**
+	 * Serialize array
+	 * 
+	 * @param array
+	 * @param result
+	 */
+	private void serializeArray(Object array, StringBuilder result) {
+		int arrayLength = Array.getLength(array);
+
+		result.append("a:").append(arrayLength).append(":{");
+
+		for (int i = 0; i < arrayLength; i++) {
+			serializeCore(i, result);
+			serializeCore(Array.get(array, i), result);
+		}
+
 		result.append("}");
 	}
 
