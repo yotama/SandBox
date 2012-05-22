@@ -1,8 +1,9 @@
-package com.yotagumi.SandBox;
+package com.yotagumi.sandbox;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.yotagumi.sandbox.PHPSerializer;
 
 /**
  * Test for PHPSerialize
@@ -53,6 +56,7 @@ public class PHPSerializerTest {
 	public void test_serialized_Double() {
 		assertThat(target.serialize(Double.valueOf(0.01d)), is("d:0.01;"));
 		assertThat(target.serialize(Float.valueOf(0.1f)), is("d:0.1;"));
+		assertThat(target.serialize(BigDecimal.valueOf(11.9)), is("d:11.9;"));
 	}
 
 	@Test

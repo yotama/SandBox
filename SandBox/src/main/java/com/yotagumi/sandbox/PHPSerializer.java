@@ -1,4 +1,4 @@
-package com.yotagumi.SandBox;
+package com.yotagumi.sandbox;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
@@ -139,7 +139,7 @@ public class PHPSerializer {
 
 		PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(object.getClass());
 
-		List<PropertyDescriptor> targetDescriptor = new ArrayList<>();
+		List<PropertyDescriptor> targetDescriptor = new ArrayList<PropertyDescriptor>();
 		int propertyCount = 0;
 		for (PropertyDescriptor descriptor : descriptors) {
 			Method readMethod = descriptor.getReadMethod();
