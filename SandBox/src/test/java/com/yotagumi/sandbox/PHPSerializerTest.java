@@ -63,14 +63,22 @@ public class PHPSerializerTest {
 		map.put("name", "Yotama");
 		map.put("age", 28);
 		assertThat(target.serialize(map), is("a:2:{s:3:\"age\";i:28;s:4:\"name\";s:6:\"Yotama\";}"));
+
+		Map<String, String> emptyMap = new HashMap<>();
+		assertThat(target.serialize(emptyMap), is("a:0:{}"));
+		
 	}
 	
 	@Test
 	public void test_serialized_List() {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		list.add("Kagoshima");
 		list.add("Tokyo");
 		assertThat(target.serialize(list), is("a:2:{i:0;s:9:\"Kagoshima\";i:1;s:5:\"Tokyo\";}"));
+
+		List<Integer> emptyList = new ArrayList<>();
+		assertThat(target.serialize(emptyList),  is("a:0:{}"));
+		
 	}
 	
 	@Test
